@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.openrewrite.DocumentExample;
 import org.openrewrite.InMemoryExecutionContext;
 import org.openrewrite.java.JavaParser;
+import org.openrewrite.test.RecipeQualityValidation;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
@@ -38,6 +39,8 @@ class NoJodaTimeTest implements RewriteTest {
     @Test
     void migrateJodaTime() {
         rewriteRun(
+          // ChangeType renames the types in a call's Joda-Time method but keeps the method, such as plusDays(int)
+          spec -> spec.recipeQualityValidation(RecipeQualityValidation.builder().parserTypedTrees(false).build()),
           mavenProject("foo",
             srcMainJava(
               // language=java
@@ -116,6 +119,8 @@ class NoJodaTimeTest implements RewriteTest {
     @Test
     void localDate() {
         rewriteRun(
+          // ChangeType renames the types in a call's Joda-Time method but keeps the method, such as plusDays(int)
+          spec -> spec.recipeQualityValidation(RecipeQualityValidation.builder().parserTypedTrees(false).build()),
           java(
             """
               import org.joda.time.LocalDate;
